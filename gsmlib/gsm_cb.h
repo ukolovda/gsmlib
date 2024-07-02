@@ -81,7 +81,7 @@ namespace gsmlib
 
   public:
     // constructor with given pdu
-    CBMessage(std::string pdu) throw(GsmException);
+    CBMessage(std::string pdu) ;
 
     // accessor functions
     GeographicalScope getGeographicalScope() const {return _geographicalScope;}

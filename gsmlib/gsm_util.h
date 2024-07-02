@@ -36,7 +36,7 @@ namespace gsmlib
 
   // convert gsm to Latin-1
   // characters that have no counterpart in Latin-1 are converted to
-  // code 172 (Latin-1 boolean not, "¬")
+  // code 172 (Latin-1 boolean not, "ï¿½")
   std::string gsmToLatin1(std::string s);
 
   // convert Latin-1 to gsm
@@ -136,7 +136,7 @@ namespace gsmlib
   bool isFile(std::string filename);
 
   // make backup file adequate for this operating system
-  void renameToBackupFile(std::string filename) throw(GsmException);
+  void renameToBackupFile(std::string filename);
 
   // Base class for class for which copying is not allow
   // only used for debugging
@@ -157,7 +157,7 @@ namespace gsmlib
   std::string lowercase(std::string s);
 
   // convert std::string to number and check for all digits
-  int checkNumber(std::string s) throw(GsmException);
+  int checkNumber(std::string s);
 
   // like printf, but return C++ std::string
 #ifdef HAVE_VSNPRINTF
@@ -222,8 +222,7 @@ namespace gsmlib
 
   // check for valid text and telephone number
   // throw exception if error
-  extern void checkTextAndTelephone(std::string text, std::string telephone)
-    throw(GsmException);
+  extern void checkTextAndTelephone(std::string text, std::string telephone);
 };
 
 #endif // GSM_UTIL_H

@@ -34,7 +34,7 @@ static const std::string dashes =
 
 Ref<SMSMessage> SMSMessage::decode(std::string pdu,
                                    bool SCtoMEdirection,
-                                   GsmAt *at) throw(GsmException)
+                                   GsmAt *at)
 {
   Ref<SMSMessage> result;
   SMSDecoder d(pdu);
@@ -87,7 +87,7 @@ Ref<SMSMessage> SMSMessage::decode(std::string pdu,
   return result;
 }
 
-Ref<SMSMessage> SMSMessage::decode(std::istream& s) throw(gsmlib::GsmException)
+Ref<SMSMessage> SMSMessage::decode(std::istream& s) 
 {
   std::string pdu;
   unsigned char ScToMe; 
@@ -99,7 +99,7 @@ Ref<SMSMessage> SMSMessage::decode(std::istream& s) throw(gsmlib::GsmException)
 }
 
 unsigned char SMSMessage::send(Ref<SMSMessage> &ackPdu)
-  throw(GsmException)
+
 {
   if (_messageTypeIndicator != SMS_SUBMIT &&
       _messageTypeIndicator != SMS_COMMAND)
@@ -131,7 +131,7 @@ unsigned char SMSMessage::send(Ref<SMSMessage> &ackPdu)
   return messageReference;
 }
 
-unsigned char SMSMessage::send() throw(GsmException)
+unsigned char SMSMessage::send()
 {
   SMSMessageRef mref;
   return send(mref);
@@ -199,7 +199,7 @@ SMSDeliverMessage::SMSDeliverMessage()
   init();
 }
 
-SMSDeliverMessage::SMSDeliverMessage(std::string pdu) throw(GsmException)
+SMSDeliverMessage::SMSDeliverMessage(std::string pdu)
 {
   SMSDecoder d(pdu);
   _serviceCentreAddress = d.getAddress(true);
@@ -329,7 +329,7 @@ SMSSubmitMessage::SMSSubmitMessage()
   init();
 }
 
-SMSSubmitMessage::SMSSubmitMessage(std::string pdu) throw(GsmException)
+SMSSubmitMessage::SMSSubmitMessage(std::string pdu)
 { 
   SMSDecoder d(pdu);
   _serviceCentreAddress = d.getAddress(true);
@@ -475,7 +475,7 @@ void SMSStatusReportMessage::init()
   _status = SMS_STATUS_RECEIVED;
 }
 
-SMSStatusReportMessage::SMSStatusReportMessage(std::string pdu) throw(GsmException)
+SMSStatusReportMessage::SMSStatusReportMessage(std::string pdu)
 {
   SMSDecoder d(pdu);
   _serviceCentreAddress = d.getAddress(true);
@@ -552,7 +552,7 @@ void SMSCommandMessage::init()
   _commandDataLength = 0; 
 }
 
-SMSCommandMessage::SMSCommandMessage(std::string pdu) throw(GsmException)
+SMSCommandMessage::SMSCommandMessage(std::string pdu)
 {
   SMSDecoder d(pdu);
   _serviceCentreAddress = d.getAddress(true);
@@ -637,7 +637,7 @@ void SMSDeliverReportMessage::init()
 }
 
 SMSDeliverReportMessage::SMSDeliverReportMessage(std::string pdu)
-  throw(GsmException)
+
 {
   SMSDecoder d(pdu);
   _serviceCentreAddress = d.getAddress(true);
@@ -741,7 +741,7 @@ void SMSSubmitReportMessage::init()
   _userDataLengthPresent = false;
 }
 
-SMSSubmitReportMessage::SMSSubmitReportMessage(std::string pdu) throw(GsmException)
+SMSSubmitReportMessage::SMSSubmitReportMessage(std::string pdu) 
 {
   SMSDecoder d(pdu);
   _serviceCentreAddress = d.getAddress(true);

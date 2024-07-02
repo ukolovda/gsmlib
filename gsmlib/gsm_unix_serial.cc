@@ -83,7 +83,7 @@ static void stopTimer()
 
 // UnixSerialPort members
 
-void UnixSerialPort::throwModemException(std::string message) throw(GsmException)
+void UnixSerialPort::throwModemException(std::string message)
 {
   std::ostringstream os;
   os << message << " (errno: " << errno << "/" << strerror(errno) << ")"
@@ -97,7 +97,7 @@ void UnixSerialPort::putBack(unsigned char c)
   _oldChar = c;
 }
 
-int UnixSerialPort::readByte() throw(GsmException)
+int UnixSerialPort::readByte()
 {
   if (_oldChar != -1)
   {
@@ -164,7 +164,7 @@ int UnixSerialPort::readByte() throw(GsmException)
 
 UnixSerialPort::UnixSerialPort(std::string device, speed_t lineSpeed,
 				       std::string initString, bool swHandshake)
-  throw(GsmException) :
+   :
   _oldChar(-1), _timeoutVal(TIMEOUT_SECS)
 {
   struct termios t;
@@ -304,7 +304,7 @@ UnixSerialPort::UnixSerialPort(std::string device, speed_t lineSpeed,
                                   device.c_str()), OtherError);
 }
 
-std::string UnixSerialPort::getLine() throw(GsmException)
+std::string UnixSerialPort::getLine()
 {
   std::string result;
   int c;
@@ -326,7 +326,7 @@ std::string UnixSerialPort::getLine() throw(GsmException)
 }
 
 void UnixSerialPort::putLine(std::string line, bool carriageReturn)
-  throw(GsmException)
+
 {
 #ifndef NDEBUG
   if (debugLevel() >= 1)
@@ -394,7 +394,7 @@ void UnixSerialPort::putLine(std::string line, bool carriageReturn)
   // in order to properly handle unsolicited result codes from the ME/TA
 }
 
-bool UnixSerialPort::wait(GsmTime timeout) throw(GsmException)
+bool UnixSerialPort::wait(GsmTime timeout)
 {
   fd_set fds;
   FD_ZERO(&fds);
@@ -414,7 +414,7 @@ UnixSerialPort::~UnixSerialPort()
     close(_fd);
 }
 
-speed_t gsmlib::baudRateStrToSpeed(std::string baudrate) throw(GsmException)
+speed_t gsmlib::baudRateStrToSpeed(std::string baudrate) 
 {
   if (baudrate == "300")
     return B300;

@@ -40,7 +40,7 @@ Capabilities::Capabilities() :
 
 // MeTa members
 
-void MeTa::init() throw(GsmException)
+void MeTa::init()
 {
   // switch on extended error codes
   // caution: may be ignored by some TAs, so allow it to fail
@@ -116,7 +116,7 @@ void MeTa::init() throw(GsmException)
   _at->setEventHandler(&_defaultEventHandler);
 }
 
-MeTa::MeTa(Ref<Port> port) throw(GsmException) : _port(port)
+MeTa::MeTa(Ref<Port> port)  : _port(port)
 {
   // initialize AT handling
   _at = new GsmAt(*this);
@@ -124,24 +124,24 @@ MeTa::MeTa(Ref<Port> port) throw(GsmException) : _port(port)
   init();
 }
 
-// MeTa::MeTa(Ref<GsmAt> at) throw(GsmException) :
+// MeTa::MeTa(Ref<GsmAt> at)  :
 //   _at(at)
 // {
 //   init();
 // }
 
-void MeTa::setPIN(std::string pin) throw(GsmException)
+void MeTa::setPIN(std::string pin)
 {
   _at->chat("+CPIN=\"" + pin + "\"");
 }
 
-std::string MeTa::getPINStatus() throw(GsmException)
+std::string MeTa::getPINStatus()
 {
   Parser p(_at->chat("+CPIN?", "+CPIN:"));
   return p.parseString();
 }
 
-void MeTa::setPhonebook(std::string phonebookName) throw(GsmException)
+void MeTa::setPhonebook(std::string phonebookName)
 {
   if (phonebookName != _lastPhonebookName)
   {
@@ -151,7 +151,7 @@ void MeTa::setPhonebook(std::string phonebookName) throw(GsmException)
 }
 
 std::string MeTa::setSMSStore(std::string smsStore, int storeTypes, bool needResultCode)
-  throw(GsmException)
+
 {
   if (_capabilities._cpmsParamCount == -1)
   {
@@ -184,7 +184,7 @@ std::string MeTa::setSMSStore(std::string smsStore, int storeTypes, bool needRes
 
 void MeTa::getSMSStore(std::string &readDeleteStore,
                        std::string &writeSendStore,
-                       std::string &receiveStore) throw(GsmException)
+                       std::string &receiveStore)
 {
   Parser p(_at->chat("+CPMS?", "+CPMS:"));
   writeSendStore = receiveStore = "";
@@ -207,7 +207,7 @@ void MeTa::getSMSStore(std::string &readDeleteStore,
   }
 }
 
-void MeTa::waitEvent(GsmTime timeout) throw(GsmException)
+void MeTa::waitEvent(GsmTime timeout)
 {
   if (_at->wait(timeout))
     _at->chat();                // send AT, wait for OK, handle events
@@ -241,7 +241,7 @@ static std::string stringVectorToString(const std::vector<std::string>& v,
   return result;
 }
 
-MEInfo MeTa::getMEInfo() throw(GsmException)
+MEInfo MeTa::getMEInfo()
 {
   MEInfo result;
   // some TAs just return OK and no info line
@@ -257,13 +257,13 @@ MEInfo MeTa::getMEInfo() throw(GsmException)
   return result;
 }
 
-std::vector<std::string> MeTa::getSupportedCharSets() throw(GsmException)
+std::vector<std::string> MeTa::getSupportedCharSets()
 {
   Parser p(_at->chat("+CSCS=?", "+CSCS:"));
   return p.parseStringList();
 }
     
-std::string MeTa::getCurrentCharSet() throw(GsmException)
+std::string MeTa::getCurrentCharSet()
 {
   if (_lastCharSet == "")
   {
@@ -273,34 +273,34 @@ std::string MeTa::getCurrentCharSet() throw(GsmException)
   return _lastCharSet;
 }
 
-void MeTa::setCharSet(std::string charSetName) throw(GsmException)
+void MeTa::setCharSet(std::string charSetName)
 {
   _at->chat("+CSCS=\"" + charSetName + "\"");
   _lastCharSet = "";
 }
 
-std::string MeTa::getExtendedErrorReport() throw(GsmException)
+std::string MeTa::getExtendedErrorReport()
 {
   return _at->chat("+CEER", "+CEER:");
 }
 
-void MeTa::dial(std::string number) throw(GsmException)
+void MeTa::dial(std::string number)
 {
   _at->chat("D" + number + ";");
 }
 
-void MeTa::answer() throw(GsmException)
+void MeTa::answer()
 {
   _at->chat("A");
 }
 
-void MeTa::hangup() throw(GsmException)
+void MeTa::hangup()
 {
   _at->chat("H");
 
 }
 
-std::vector<OPInfo> MeTa::getAvailableOPInfo() throw(GsmException)
+std::vector<OPInfo> MeTa::getAvailableOPInfo()
 {
   std::vector<OPInfo> result;
   std::vector<std::string> responses = _at->chatv("+COPS=?", "+COPS:");
@@ -402,7 +402,7 @@ std::vector<OPInfo> MeTa::getAvailableOPInfo() throw(GsmException)
   return result;
 }
 
-OPInfo MeTa::getCurrentOPInfo() throw(GsmException)
+OPInfo MeTa::getCurrentOPInfo()
 {
   OPInfo result;
 
@@ -517,7 +517,7 @@ OPInfo MeTa::getCurrentOPInfo() throw(GsmException)
 void MeTa::setCurrentOPInfo(OPModes mode,
                             std::string longName,
                             std::string shortName,
-                            int numericName) throw(GsmException)
+                            int numericName)
 {
   bool done = false;
   if (longName != "")
@@ -561,7 +561,7 @@ void MeTa::setCurrentOPInfo(OPModes mode,
     throw GsmException(_("unable to set operator"), OtherError);
 }
 
-std::vector<std::string> MeTa::getFacilityLockCapabilities() throw(GsmException)
+std::vector<std::string> MeTa::getFacilityLockCapabilities()
 {
   std::string locks = _at->chat("+CLCK=?", "+CLCK:");
   // some TA don't add '(' and ')' (Option FirstFone)
@@ -575,7 +575,7 @@ std::vector<std::string> MeTa::getFacilityLockCapabilities() throw(GsmException)
 }
 
 bool MeTa::getFacilityLockStatus(std::string facility, FacilityClass cl)
-  throw(GsmException)
+
 {
   // some TA return always multiline response with all classes
   // (Option FirstFone)
@@ -610,7 +610,7 @@ bool MeTa::getFacilityLockStatus(std::string facility, FacilityClass cl)
 }
 
 void MeTa::lockFacility(std::string facility, FacilityClass cl, std::string passwd)
-  throw(GsmException)
+
 {
   if (passwd == "")
     _at->chat("+CLCK=\"" + facility + "\",1,," + intToStr((int)cl));
@@ -620,7 +620,7 @@ void MeTa::lockFacility(std::string facility, FacilityClass cl, std::string pass
 }
 
 void MeTa::unlockFacility(std::string facility, FacilityClass cl, std::string passwd)
-  throw(GsmException)
+
 {
   if (passwd == "")
     _at->chat("+CLCK=\"" + facility + "\",0,," + intToStr((int)cl));
@@ -629,7 +629,7 @@ void MeTa::unlockFacility(std::string facility, FacilityClass cl, std::string pa
               + intToStr((int)cl));
 }
 
-std::vector<PWInfo> MeTa::getPasswords() throw(GsmException)
+std::vector<PWInfo> MeTa::getPasswords()
 {
   std::vector<PWInfo> result;
   Parser p(_at->chat("+CPWD=?", "+CPWD:"));
@@ -648,13 +648,13 @@ std::vector<PWInfo> MeTa::getPasswords() throw(GsmException)
 }
 
 void MeTa::setPassword(std::string facility, std::string oldPasswd, std::string newPasswd)
-  throw(GsmException)
+
 {
   _at->chat("+CPWD=\"" + facility + "\",\"" + oldPasswd + "\",\"" +
             newPasswd + "\"");
 }
 
-bool MeTa::getNetworkCLIP() throw(GsmException)
+bool MeTa::getNetworkCLIP()
 {
   Parser p(_at->chat("+CLIP?", "+CLIP:"));
   p.parseInt();                 // ignore result code presentation
@@ -662,7 +662,7 @@ bool MeTa::getNetworkCLIP() throw(GsmException)
   return p.parseInt() == 1;
 }
 
-void MeTa::setCLIPPresentation(bool enable) throw(GsmException)
+void MeTa::setCLIPPresentation(bool enable)
 {
   if (enable)
     _at->chat("+CLIP=1");
@@ -670,7 +670,7 @@ void MeTa::setCLIPPresentation(bool enable) throw(GsmException)
     _at->chat("+CLIP=0");
 }
 
-bool MeTa::getCLIPPresentation() throw(GsmException)
+bool MeTa::getCLIPPresentation()
 {
   Parser p(_at->chat("+CLIP?", "+CLIP:"));
   return p.parseInt() == 1;     // ignore rest of line
@@ -681,7 +681,7 @@ void MeTa::setCallForwarding(ForwardReason reason,
                              std::string number,
                              std::string subaddr,
                              FacilityClass cl,
-                             int forwardTime) throw(GsmException)
+                             int forwardTime)
 {
   // FIXME subaddr is currently ignored
   if (forwardTime != NOT_SET && (forwardTime < 0 || forwardTime > 30))
@@ -709,7 +709,7 @@ void MeTa::setCallForwarding(ForwardReason reason,
 void MeTa::getCallForwardInfo(ForwardReason reason,
                               ForwardInfo &voice,
                               ForwardInfo &fax,
-                              ForwardInfo &data) throw(GsmException)
+                              ForwardInfo &data)
 {
   // Initialize to some sensible values:
   voice._active = false;
@@ -804,13 +804,13 @@ void MeTa::getCallForwardInfo(ForwardReason reason,
   }
 }
 
-int MeTa::getBatteryChargeStatus() throw(GsmException)
+int MeTa::getBatteryChargeStatus()
 {
   Parser p(_at->chat("+CBC", "+CBC:"));
   return p.parseInt();
 }
 
-int MeTa::getBatteryCharge() throw(GsmException)
+int MeTa::getBatteryCharge()
 {
   Parser p(_at->chat("+CBC", "+CBC:"));
   p.parseInt();
@@ -818,7 +818,7 @@ int MeTa::getBatteryCharge() throw(GsmException)
   return p.parseInt();
 }
 
-int MeTa::getFunctionalityLevel() throw(GsmException)
+int MeTa::getFunctionalityLevel()
 {
   try {
     Parser p(_at->chat("+CFUN?", "+CFUN:"));
@@ -841,7 +841,7 @@ int MeTa::getFunctionalityLevel() throw(GsmException)
   }
 }
 
-void MeTa::setFunctionalityLevel(int level) throw(GsmException)
+void MeTa::setFunctionalityLevel(int level)
 {
   try {
     Parser p(_at->chat("+CFUN="  + intToStr(level)));
@@ -859,13 +859,13 @@ void MeTa::setFunctionalityLevel(int level) throw(GsmException)
   }
 }
 
-int MeTa::getSignalStrength() throw(GsmException)
+int MeTa::getSignalStrength()
 {
   Parser p(_at->chat("+CSQ", "+CSQ:"));
   return p.parseInt();
 }
 
-int MeTa::getBitErrorRate() throw(GsmException)
+int MeTa::getBitErrorRate()
 {
   Parser p(_at->chat("+CSQ", "+CSQ:"));
   p.parseInt();
@@ -873,14 +873,14 @@ int MeTa::getBitErrorRate() throw(GsmException)
   return p.parseInt();
 }
 
-std::vector<std::string> MeTa::getPhoneBookStrings() throw(GsmException)
+std::vector<std::string> MeTa::getPhoneBookStrings()
 {
   Parser p(_at->chat("+CPBS=?", "+CPBS:"));
   return p.parseStringList();
 }
 
 PhonebookRef MeTa::getPhonebook(std::string phonebookString,
-                                bool preload) throw(GsmException)
+                                bool preload)
 {
   for (PhonebookVector::iterator i = _phonebookCache.begin();
        i !=  _phonebookCache.end(); ++i)
@@ -893,13 +893,13 @@ PhonebookRef MeTa::getPhonebook(std::string phonebookString,
   return newPb;
 }
 
-std::string MeTa::getServiceCentreAddress() throw(GsmException)
+std::string MeTa::getServiceCentreAddress()
 {
   Parser p(_at->chat("+CSCA?", "+CSCA:"));
   return p.parseString();
 }
 
-void MeTa::setServiceCentreAddress(std::string sca) throw(GsmException)
+void MeTa::setServiceCentreAddress(std::string sca)
 {
   int type;
   sca = removeWhiteSpace(sca);
@@ -913,14 +913,14 @@ void MeTa::setServiceCentreAddress(std::string sca) throw(GsmException)
   Parser p(_at->chat("+CSCA=\"" + sca + "\"," + intToStr(type)));
 }
 
-std::vector<std::string> MeTa::getSMSStoreNames() throw(GsmException)
+std::vector<std::string> MeTa::getSMSStoreNames()
 {
   Parser p(_at->chat("+CPMS=?", "+CPMS:"));
   // only return <mem1> values
   return p.parseStringList();
 }
 
-SMSStoreRef MeTa::getSMSStore(std::string storeName) throw(GsmException)
+SMSStoreRef MeTa::getSMSStore(std::string storeName)
 {
   for (SMSStoreVector::iterator i = _smsStoreCache.begin();
        i !=  _smsStoreCache.end(); ++i)
@@ -933,7 +933,7 @@ SMSStoreRef MeTa::getSMSStore(std::string storeName) throw(GsmException)
   return newSs;
 }
 
-void MeTa::sendSMS(Ref<SMSSubmitMessage> smsMessage) throw(GsmException)
+void MeTa::sendSMS(Ref<SMSSubmitMessage> smsMessage)
 {
   smsMessage->setAt(_at);
   smsMessage->send();
@@ -942,7 +942,7 @@ void MeTa::sendSMS(Ref<SMSSubmitMessage> smsMessage) throw(GsmException)
 void MeTa::sendSMSs(Ref<SMSSubmitMessage> smsTemplate, std::string text,
                     bool oneSMS,
                     int concatenatedMessageId)
-  throw(GsmException)
+
 {
   assert(! smsTemplate.isnull());
 
@@ -1005,7 +1005,7 @@ void MeTa::sendSMSs(Ref<SMSSubmitMessage> smsTemplate, std::string text,
   }
 }
 
-void MeTa::setMessageService(int serviceLevel) throw(GsmException)
+void MeTa::setMessageService(int serviceLevel)
 {
   std::string s;
   switch (serviceLevel)
@@ -1024,7 +1024,7 @@ void MeTa::setMessageService(int serviceLevel) throw(GsmException)
   _at->chat("+CSMS=" + s, "+CSMS:", true);
 }
 
-unsigned int MeTa::getMessageService() throw(GsmException)
+unsigned int MeTa::getMessageService()
 {
   try {
     Parser p(_at->chat("+CSMS?", "+CSMS:"));
@@ -1042,7 +1042,7 @@ unsigned int MeTa::getMessageService() throw(GsmException)
 
 void MeTa::getSMSRoutingToTA(bool &smsRouted,
                              bool &cbsRouted,
-                             bool &statusReportsRouted) throw(GsmException)
+                             bool &statusReportsRouted)
 {
   Parser p(_at->chat("+CNMI?", "+CNMI:"));
   p.parseInt();
@@ -1077,7 +1077,7 @@ void MeTa::getSMSRoutingToTA(bool &smsRouted,
 void MeTa::setSMSRoutingToTA(bool enableSMS, bool enableCBS,
                              bool enableStatReport,
                              bool onlyReceptionIndication)
-  throw(GsmException)
+
 {
   bool smsModesSet = false;
   bool cbsModesSet = false;
@@ -1232,7 +1232,7 @@ void MeTa::setSMSRoutingToTA(bool enableSMS, bool enableCBS,
 }
 
 bool MeTa::getCallWaitingLockStatus(FacilityClass cl)
-  throw(GsmException)
+
 {
   // some TA return always multiline response with all classes
   // (Option FirstFone)
@@ -1263,7 +1263,7 @@ bool MeTa::getCallWaitingLockStatus(FacilityClass cl)
 
 }
 void MeTa::setCallWaitingLockStatus(FacilityClass cl, bool lock)
-  throw(GsmException)
+
 {
   if(lock)
     _at->chat("+CCWA=0,1," + intToStr((int)cl));
@@ -1271,7 +1271,7 @@ void MeTa::setCallWaitingLockStatus(FacilityClass cl, bool lock)
     _at->chat("+CCWA=0,0," + intToStr((int)cl));
 }
 
-void MeTa::setCLIRPresentation(bool enable) throw(GsmException)
+void MeTa::setCLIRPresentation(bool enable)
 {
   if (enable)
     _at->chat("+CLIR=1");
@@ -1279,7 +1279,7 @@ void MeTa::setCLIRPresentation(bool enable) throw(GsmException)
     _at->chat("+CLIR=0");
 }
 
-int MeTa::getCLIRPresentation() throw(GsmException)
+int MeTa::getCLIRPresentation() 
 {
   // 0:according to the subscription of the CLIR service
   // 1:CLIR invocation

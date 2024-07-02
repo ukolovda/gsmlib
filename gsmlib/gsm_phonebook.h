@@ -40,21 +40,21 @@ namespace gsmlib
     PhonebookEntry(std::string telephone, std::string text) :
       PhonebookEntryBase(telephone, text),
       _cached(true), _myPhonebook(NULL) {}
-    PhonebookEntry(const PhonebookEntryBase &e) throw(GsmException);
+    PhonebookEntry(const PhonebookEntryBase &e) ;
 
     // accessor functions, inherited from PhonebookEntryBase
     // set() does not use the index argument
     void set(std::string telephone, std::string text, int index = -1,
              bool useIndex = false)
-      throw(GsmException);
-    std::string text() const throw(GsmException);
-    std::string telephone() const throw(GsmException);
+      ;
+    std::string text() const ;
+    std::string telephone() const ;
 
     // return true if entry is cached (and caching is enabled)
     bool cached() const;
 
-    PhonebookEntry(const PhonebookEntry &e) throw(GsmException);
-    PhonebookEntry &operator=(const PhonebookEntry &e) throw(GsmException);
+    PhonebookEntry(const PhonebookEntry &e) ;
+    PhonebookEntry &operator=(const PhonebookEntry &e) ;
 
     virtual ~PhonebookEntry() {}
 
@@ -94,11 +94,11 @@ namespace gsmlib
     // internal access functions
     // read/write/find entry from/to ME
     void readEntry(int index, std::string &telephone, std::string &text)
-      throw(GsmException);
+      ;
     void writeEntry(int index, std::string telephone, std::string text)
-      throw(GsmException);
+      ;
     void findEntry(std::string text, int &index, std::string &telephone)
-      throw(GsmException);
+      ;
 
     // adjust size only if it was set once
     void adjustSize(int sizeAdjust)
@@ -108,7 +108,7 @@ namespace gsmlib
 
     // insert into first empty position and return position where inserted
     iterator insertFirstEmpty(const std::string telephone, const std::string text)
-      throw(GsmException);
+      ;
 
     // insert into specified index position
     iterator insert(const std::string telephone, const std::string text,
@@ -118,7 +118,7 @@ namespace gsmlib
     // load phonebook name phonebookName, use AT handler at
     // preload entire phonebook if preload == true
     Phonebook(std::string phonebookName, Ref<GsmAt> at,
-              MeTa &myMeTa, bool preload = false) throw(GsmException);
+              MeTa &myMeTa, bool preload = false) ;
 
   public:
     // set cache mode on or off
@@ -151,10 +151,10 @@ namespace gsmlib
     const_reference operator[](int n) const;
 
     // the size macros return the number of used entries
-    int size() const throw(GsmException);
+    int size() const ;
     int max_size() const {return _maxSize;}
     int capacity() const {return _maxSize;}
-    bool empty() const throw(GsmException) {return size() == 0;}
+    bool empty() const  {return size() == 0;}
 
     // insert iterators insert into the first empty cell regardless of position
     // - existing iterators are not invalidated after an insert operation
@@ -162,21 +162,21 @@ namespace gsmlib
     // - insert only writes to available positions
     // - throw an exception if size() == max_size() (ie. not empty slots)
     iterator insert(iterator position, const PhonebookEntry& x)
-      throw(GsmException);
+      ;
 
     // insert n times, same procedure as above
     void insert(iterator pos, int n, const PhonebookEntry& x)
-      throw(GsmException);
+      ;
     void insert(iterator pos, long n, const PhonebookEntry& x)
-      throw(GsmException);
+      ;
 
     // erase operators set used slots to "empty"
-    iterator erase(iterator position) throw(GsmException);
-    iterator erase(iterator first, iterator last) throw(GsmException);
-    void clear() throw(GsmException);
+    iterator erase(iterator position) ;
+    iterator erase(iterator first, iterator last) ;
+    void clear() ;
 
     // finds an entry given the text
-    iterator find(std::string text) throw(GsmException);
+    iterator find(std::string text) ;
     
     // destructor
     virtual ~Phonebook();
